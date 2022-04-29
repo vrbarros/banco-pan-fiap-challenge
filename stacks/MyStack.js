@@ -1,0 +1,23 @@
+import * as sst from '@serverless-stack/resources';
+
+export default class MyStack extends sst.Stack {
+  constructor(scope, id, props) {
+    super(scope, id, props);
+
+    // Create a Next.js site
+    const site = new sst.NextjsSite(this, 'Site', {
+      path: 'frontend',
+      environment: {
+        REGION: scope.region,
+      },
+    });
+
+    // Allow the Next.js API to access the table
+    site.attachPermissions([]);
+
+    // Show the site URL in the output
+    this.addOutputs({
+      URL: site.url,
+    });
+  }
+}
