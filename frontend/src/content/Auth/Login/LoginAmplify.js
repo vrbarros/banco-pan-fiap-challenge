@@ -13,7 +13,8 @@ import {
   Checkbox,
   Typography,
   FormControlLabel,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { useAuth } from 'src/hooks/useAuth';
 import { useRefMounted } from 'src/hooks/useRefMounted';
@@ -148,6 +149,11 @@ export const LoginAmplify = (props) => {
       </Button>
       {Boolean(formik.errors.recaptcha) && (
         <FormHelperText error>{formik.errors.recaptcha}</FormHelperText>
+      )}
+      {Boolean(formik.errors.submit) && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {formik.errors.submit}
+        </Alert>
       )}
     </form>
   );

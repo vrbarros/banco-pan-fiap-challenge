@@ -38,7 +38,10 @@ export const RegisterAmplify = (props) => {
         .email(t('O e-mail informado precisa ser em um formato válido'))
         .max(255)
         .required(t('O campo e-mail é necessário')),
-      password: Yup.string().max(255).required(t('O campo senha é necessário')),
+      password: Yup.string()
+        .min(6, 'Sua senha deve conter no mínimo 6 dígitos')
+        .max(12, 'Sua senha deve conter no máximo 12 dígitos')
+        .required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
         t('Você precisa estar de acordo com termos e condições de uso')

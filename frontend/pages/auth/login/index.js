@@ -1,10 +1,8 @@
 import {
   Box,
   Card,
-  Tooltip,
   Typography,
   Container,
-  Alert,
   styled,
   Button
 } from '@mui/material';
@@ -185,15 +183,6 @@ function LoginCover() {
                   <b>Abra sua conta!</b>
                 </Link>
               </Box>
-              {method !== 'Auth0' && (
-                <Tooltip
-                  title={t('Used only for the live preview demonstration !')}
-                >
-                  <Alert severity="warning">
-                    Use <b>fiap@bancopan.com.br</b> e senha <b>Fiap2022*@</b>
-                  </Alert>
-                </Tooltip>
-              )}
             </Card>
           </Container>
         </MainContent>
