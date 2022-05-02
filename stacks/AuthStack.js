@@ -19,8 +19,8 @@ export default class AuthStack extends sst.Stack {
           },
           passwordPolicy: {
             minLength: 6,
-            requireLowercase: true,
-            requireUppercase: true,
+            requireLowercase: false,
+            requireUppercase: false,
             requireDigits: false,
             requireSymbols: false,
           },

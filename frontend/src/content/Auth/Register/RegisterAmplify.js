@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
 import Link from 'src/components/Link';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { recaptcha } from 'config';
 
 import {
   Button,
@@ -9,7 +11,8 @@ import {
   TextField,
   Typography,
   FormControlLabel,
-  CircularProgress
+  CircularProgress,
+  Box
 } from '@mui/material';
 import { useAuth } from 'src/hooks/useAuth';
 import { useRefMounted } from 'src/hooks/useRefMounted';
@@ -27,29 +30,32 @@ export const RegisterAmplify = (props) => {
       email: '',
       password: '',
       terms: false,
+      recaptcha: null,
       submit: null
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email(t('The email provided should be a valid email address'))
+        .email(t('O e-mail informado precisa ser em um formato válido'))
         .max(255)
-        .required(t('The email field is required')),
-      password: Yup.string()
-        .min(8)
-        .max(255)
-        .required(t('The password field is required')),
+        .required(t('O campo e-mail é necessário')),
+      password: Yup.string().max(255).required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
-        t('You must agree to our terms and conditions')
-      )
+        t('Você precisa estar de acordo com termos e condições de uso')
+      ),
+      recaptcha: Yup.string()
+        .nullable()
+        .required(t('Você precisa fazer a verificação de que não é um robô'))
     }),
     onSubmit: async (values, helpers) => {
       try {
         await register(values.email, values.password);
 
         if (isMountedRef()) {
-          const backTo = router.query.backTo || '/dashboards/reports';
-          router.push(backTo);
+          router.push({
+            pathname: '/auth/verification-code',
+            query: { redirect: router.query.redirect, email: values.email }
+          });
         }
       } catch (err) {
         console.error(err);
@@ -70,7 +76,7 @@ export const RegisterAmplify = (props) => {
         fullWidth
         margin="normal"
         helperText={formik.touched.email && formik.errors.email}
-        label={t('Email address')}
+        label={t('E-mail')}
         name="email"
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
@@ -83,7 +89,7 @@ export const RegisterAmplify = (props) => {
         fullWidth
         margin="normal"
         helperText={formik.touched.password && formik.errors.password}
-        label={t('Password')}
+        label={t('Senha')}
         name="password"
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
@@ -103,8 +109,8 @@ export const RegisterAmplify = (props) => {
         label={
           <>
             <Typography variant="body2">
-              {t('I accept the')}{' '}
-              <Link href="#">{t('terms and conditions')}</Link>.
+              {t('Estou de acordo com')}{' '}
+              <Link href="#">{t('termos e condições')}</Link>.
             </Typography>
           </>
         }
@@ -112,9 +118,15 @@ export const RegisterAmplify = (props) => {
       {Boolean(formik.touched.terms && formik.errors.terms) && (
         <FormHelperText error>{formik.errors.terms}</FormHelperText>
       )}
+      <Box sx={{ mt: 1 }}>
+        <ReCAPTCHA
+          sitekey={recaptcha.sitekey}
+          onChange={(value) => formik.setFieldValue('recaptcha', value)}
+        />
+      </Box>
       <Button
         sx={{
-          mt: 3
+          mt: 2
         }}
         color="primary"
         startIcon={
@@ -126,8 +138,11 @@ export const RegisterAmplify = (props) => {
         size="large"
         variant="contained"
       >
-        {t('Create your account')}
+        {t('Abrir minha conta')}
       </Button>
+      {Boolean(formik.errors.recaptcha) && (
+        <FormHelperText error>{formik.errors.recaptcha}</FormHelperText>
+      )}
     </form>
   );
 };

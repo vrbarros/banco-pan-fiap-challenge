@@ -127,7 +127,7 @@ export const LoginAmplify = (props) => {
       <Box sx={{ mt: 1 }}>
         <ReCAPTCHA
           sitekey={recaptcha.sitekey}
-          onChange={(value) => console.log(value)}
+          onChange={(value) => formik.setFieldValue('recaptcha', value)}
         />
       </Box>
       <Button

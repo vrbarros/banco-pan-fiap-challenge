@@ -118,6 +118,8 @@ function LoginCover() {
                 </Typography>
               </Box>
               <Button
+                component={Link}
+                href="/auth/register"
                 color="primary"
                 type="submit"
                 fullWidth
@@ -179,7 +181,7 @@ function LoginCover() {
                 >
                   {t('Ainda não é cliente?')}
                 </Typography>{' '}
-                <Link href="#">
+                <Link href="/auth/register">
                   <b>Abra sua conta!</b>
                 </Link>
               </Box>
