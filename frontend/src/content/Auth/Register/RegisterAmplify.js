@@ -5,6 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { recaptcha } from 'config';
 
 import {
+  Alert,
   Button,
   Checkbox,
   FormHelperText,
@@ -145,6 +146,11 @@ export const RegisterAmplify = (props) => {
       </Button>
       {Boolean(formik.errors.recaptcha) && (
         <FormHelperText error>{formik.errors.recaptcha}</FormHelperText>
+      )}
+      {Boolean(formik.errors.submit) && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {formik.errors.submit}
+        </Alert>
       )}
     </form>
   );
