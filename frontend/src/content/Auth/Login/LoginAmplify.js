@@ -30,8 +30,8 @@ export const LoginAmplify = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'fiap@bancopan.com.br',
-      password: 'Fiap2022*@',
+      email: '',
+      password: '',
       terms: true,
       recaptcha: null,
       submit: null
@@ -55,8 +55,10 @@ export const LoginAmplify = (props) => {
         await login(values.email, values.password);
 
         if (isMountedRef()) {
-          const backTo = router.query.backTo || '/auth/profile';
-          router.push(backTo);
+          router.push({
+            pathname: '/auth/multi-factor',
+            query: router.query
+          });
         }
       } catch (err) {
         console.error(err);

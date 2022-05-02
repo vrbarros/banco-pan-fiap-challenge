@@ -34,6 +34,7 @@ Build your app and deploy the Next.js application.
   - `requireSymbols: false`
   - Encrypted password
 - Form validation by reCAPTCHA
+- Password recovery and reset (with code verification)
 
 ## Documentation
 

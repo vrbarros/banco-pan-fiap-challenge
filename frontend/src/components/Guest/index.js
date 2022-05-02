@@ -16,7 +16,7 @@ export const Guest = (props) => {
     }
 
     if (auth.isAuthenticated && demo !== 'true') {
-      router.push('/dashboards/reports');
+      router.push('/auth/profile');
     } else {
       setVerified(true);
     }

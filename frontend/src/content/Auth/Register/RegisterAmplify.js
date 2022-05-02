@@ -29,6 +29,7 @@ export const RegisterAmplify = (props) => {
   const formik = useFormik({
     initialValues: {
       email: '',
+      phoneNumber: '+55',
       password: '',
       terms: false,
       recaptcha: null,
@@ -39,9 +40,13 @@ export const RegisterAmplify = (props) => {
         .email(t('O e-mail informado precisa ser em um formato válido'))
         .max(255)
         .required(t('O campo e-mail é necessário')),
+      phoneNumber: Yup.string()
+        .min(14, t('Você deve preencher no formato +55XXXXXXXXXXX'))
+        .max(14, t('Você deve preencher no formato +55XXXXXXXXXXX'))
+        .required(t('O campo telefone é necessário')),
       password: Yup.string()
-        .min(6, 'Sua senha deve conter no mínimo 6 dígitos')
-        .max(12, 'Sua senha deve conter no máximo 12 dígitos')
+        .min(6, t('Sua senha deve conter no mínimo 6 dígitos'))
+        .max(12, t('Sua senha deve conter no máximo 12 dígitos'))
         .required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
@@ -53,7 +58,7 @@ export const RegisterAmplify = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await register(values.email, values.password);
+        await register(values.email, values.password, values.phoneNumber);
 
         if (isMountedRef()) {
           router.push({
@@ -86,6 +91,19 @@ export const RegisterAmplify = (props) => {
         onChange={formik.handleChange}
         type="email"
         value={formik.values.email}
+        variant="outlined"
+      />
+      <TextField
+        error={Boolean(formik.touched.phoneNumber && formik.errors.phoneNumber)}
+        fullWidth
+        margin="normal"
+        helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+        label={t('Celular')}
+        name="phoneNumber"
+        onBlur={formik.handleBlur}
+        onChange={formik.handleChange}
+        type="text"
+        value={formik.values.phoneNumber}
         variant="outlined"
       />
       <TextField

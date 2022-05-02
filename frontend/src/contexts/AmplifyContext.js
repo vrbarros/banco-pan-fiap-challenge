@@ -104,29 +104,9 @@ export const AuthProvider = (props) => {
   const login = async (email, password) => {
     const user = await Auth.signIn(email, password);
 
-    if (user.challengeName) {
-      console.error(`Can't login, "${user.challengeName}" failed.`);
-      return;
-    }
-
     dispatch({
       type: 'LOGIN',
-      payload: {
-        user: {
-          id: user.sub,
-          jobtitle: 'Conta Ouro',
-          avatar: user.picture,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          location: user.location,
-          username: user.username,
-          posts: user.posts,
-          coverImg: user.coverImg,
-          followers: user.followers,
-          description: user.description
-        }
-      }
+      payload: { user }
     });
   };
 
@@ -137,12 +117,13 @@ export const AuthProvider = (props) => {
     });
   };
 
-  const register = async (email, password) => {
+  const register = async (email, password, phoneNumber) => {
     await Auth.signUp({
       username: email,
       password,
-      attributes: { email }
+      attributes: { email, phone_number: phoneNumber }
     });
+
     dispatch({
       type: 'REGISTER'
     });
@@ -150,6 +131,7 @@ export const AuthProvider = (props) => {
 
   const verifyCode = async (username, code) => {
     await Auth.confirmSignUp(username, code);
+
     dispatch({
       type: 'VERIFY_CODE'
     });
