@@ -11,9 +11,9 @@ import {
   Dialog,
   Button,
   Avatar,
+  CircularProgress,
   styled,
-  Alert,
-  CircularProgress
+  Alert
 } from '@mui/material';
 import Head from 'next/head';
 import { useAuth } from 'src/hooks/useAuth';
@@ -70,18 +70,14 @@ const AvatarSuccess = styled(Avatar)(
 `
 );
 
-function RecoverPasswordBasic() {
+function ResetPasswordBasic() {
   const { t } = useTranslation();
   const isMountedRef = useRefMounted();
   const router = useRouter();
-  const { passwordRecovery } = useAuth();
+  const { passwordReset } = useAuth();
   const { email } = router.query;
 
   const [openDialog, setOpenDialog] = useState(false);
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
 
   return (
     <>
@@ -106,7 +102,7 @@ function RecoverPasswordBasic() {
                   mb: 1
                 }}
               >
-                {t('Recuperar senha')}
+                {t('Redefinir uma nova senha')}
               </Typography>
               <Typography
                 variant="h4"
@@ -117,7 +113,7 @@ function RecoverPasswordBasic() {
                 }}
               >
                 {t(
-                  'Informe o e-mail utilizado por sua conta no Banco PAN para que possamos ajudá-lo a definir uma nova senha.'
+                  'Enviamos um código de verificação para seu e-mail para que possa utilizar na definição de uma nova senha.'
                 )}
               </Typography>
             </Box>
@@ -125,22 +121,35 @@ function RecoverPasswordBasic() {
             <Formik
               initialValues={{
                 email: email || '',
+                password: '',
+                verificationCode: '',
                 submit: null
               }}
               validationSchema={Yup.object().shape({
                 email: Yup.string()
                   .email(
-                    t('O e-mail informado precisa estar em um formato válido')
+                    t('O e-mail informado precisa ser em um formato válido')
                   )
                   .max(255)
-                  .required(t('O campo e-mail é obrigatório'))
+                  .required(t('O campo e-mail é necessário')),
+                password: Yup.string()
+                  .min(6, 'Sua senha deve conter no mínimo 6 dígitos')
+                  .max(12, 'Sua senha deve conter no máximo 12 dígitos')
+                  .required(t('O campo senha é necessário')),
+                verificationCode: Yup.string()
+                  .max(6)
+                  .required(t('Você precisa informar um código de verificação'))
               })}
               onSubmit={async (
                 _values,
                 { setErrors, setStatus, setSubmitting }
               ) => {
                 try {
-                  await passwordRecovery(_values.email);
+                  await passwordReset(
+                    _values.email,
+                    _values.verificationCode,
+                    _values.password
+                  );
 
                   if (isMountedRef()) {
                     setStatus({ success: true });
@@ -172,7 +181,7 @@ function RecoverPasswordBasic() {
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
                     helperText={touched.email && errors.email}
-                    label={t('E-mail cadastrado')}
+                    label={t('E-mail')}
                     margin="normal"
                     name="email"
                     onBlur={handleBlur}
@@ -181,7 +190,36 @@ function RecoverPasswordBasic() {
                     value={values.email}
                     variant="outlined"
                   />
-
+                  <TextField
+                    error={Boolean(
+                      touched.verificationCode && errors.verificationCode
+                    )}
+                    fullWidth
+                    helperText={
+                      touched.verificationCode && errors.verificationCode
+                    }
+                    label={t('Código de verificação')}
+                    margin="normal"
+                    name="verificationCode"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="text"
+                    value={values.verificationCode}
+                    variant="outlined"
+                  />
+                  <TextField
+                    error={Boolean(touched.password && errors.password)}
+                    fullWidth
+                    margin="normal"
+                    helperText={touched.password && errors.password}
+                    label={t('Senha')}
+                    name="password"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="password"
+                    value={values.password}
+                    variant="outlined"
+                  />
                   <Button
                     sx={{
                       mt: 3
@@ -191,14 +229,17 @@ function RecoverPasswordBasic() {
                       isSubmitting ? <CircularProgress size="1rem" /> : null
                     }
                     disabled={
-                      isSubmitting || Boolean(touched.email && errors.email)
+                      isSubmitting ||
+                      Boolean(
+                        touched.verificationCode && errors.verificationCode
+                      )
                     }
                     type="submit"
                     fullWidth
                     size="large"
                     variant="contained"
                   >
-                    {t('Enviar uma nova senha')}
+                    {t('Confirmar')}
                   </Button>
 
                   {Boolean(errors.submit) && (
@@ -206,54 +247,6 @@ function RecoverPasswordBasic() {
                       {errors.submit}
                     </Alert>
                   )}
-
-                  <DialogWrapper
-                    open={openDialog}
-                    maxWidth="sm"
-                    fullWidth
-                    TransitionComponent={Transition}
-                    keepMounted
-                    onClose={handleCloseDialog}
-                  >
-                    <Box
-                      sx={{
-                        px: 4,
-                        pb: 4,
-                        pt: 10
-                      }}
-                    >
-                      <AvatarSuccess>
-                        <CheckTwoToneIcon />
-                      </AvatarSuccess>
-                      <Typography align="center" sx={{ px: 6 }} variant="h3">
-                        {t('Verifique seu e-mail')}
-                      </Typography>
-                      <Typography
-                        align="center"
-                        sx={{ py: 4, px: 6 }}
-                        variant="body1"
-                      >
-                        {t(
-                          'Siga as instruções que enviamos por e-mail para definir uma nova senha de acesso.'
-                        )}
-                      </Typography>
-                      <Button
-                        fullWidth
-                        component={Link}
-                        size="large"
-                        variant="contained"
-                        onClick={handleCloseDialog}
-                        href={{
-                          pathname: '/auth/reset-password',
-                          query: {
-                            email: values.email
-                          }
-                        }}
-                      >
-                        {t('Continuar')}
-                      </Button>
-                    </Box>
-                  </DialogWrapper>
                 </form>
               )}
             </Formik>
@@ -273,14 +266,50 @@ function RecoverPasswordBasic() {
           </Box>
         </Container>
       </MainContent>
+      <DialogWrapper
+        open={openDialog}
+        maxWidth="sm"
+        fullWidth
+        TransitionComponent={Transition}
+        keepMounted
+      >
+        <Box
+          sx={{
+            px: 4,
+            pb: 4,
+            pt: 10
+          }}
+        >
+          <AvatarSuccess>
+            <CheckTwoToneIcon />
+          </AvatarSuccess>
+          <Typography align="center" sx={{ px: 6 }} variant="h3">
+            {t('Definimos sua nova senha')}
+          </Typography>
+          <Typography align="center" sx={{ py: 4, px: 6 }} variant="body1">
+            {t(
+              'Sua nova senha foi salva com sucesso e você pode utilizá-la para acesso à sua conta Banco PAN.'
+            )}
+          </Typography>
+          <Button
+            fullWidth
+            component={Link}
+            size="large"
+            variant="contained"
+            href="/auth/login"
+          >
+            {t('Continuar')}
+          </Button>
+        </Box>
+      </DialogWrapper>
     </>
   );
 }
 
-RecoverPasswordBasic.getLayout = (page) => (
+ResetPasswordBasic.getLayout = (page) => (
   <Guest>
     <BaseLayout>{page}</BaseLayout>
   </Guest>
 );
 
-export default RecoverPasswordBasic;
+export default ResetPasswordBasic;

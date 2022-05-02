@@ -110,9 +110,7 @@ function VerificationCodeBasic() {
                   mb: 3
                 }}
               >
-                {t(
-                  'Enviamos um código de verificação para seu e-mail ou telefone celular.'
-                )}
+                {t('Enviamos um código de verificação para seu e-mail.')}
               </Typography>
             </Box>
 
@@ -138,7 +136,7 @@ function VerificationCodeBasic() {
                 { setErrors, setStatus, setSubmitting }
               ) => {
                 try {
-                  await verifyCode(email, _values.verificationCode);
+                  await verifyCode(_values.email, _values.verificationCode);
 
                   if (isMountedRef()) {
                     setStatus({ success: true });
