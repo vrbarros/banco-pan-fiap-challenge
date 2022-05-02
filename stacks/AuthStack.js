@@ -1,5 +1,6 @@
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sst from '@serverless-stack/resources';
+import { BooleanAttribute } from 'aws-cdk-lib/aws-cognito';
 
 export default class AuthStack extends sst.Stack {
   auth;
@@ -13,6 +14,16 @@ export default class AuthStack extends sst.Stack {
       cognito: {
         userPool: {
           signInAliases: { email: true },
+          customAttributes: {
+            isBlocked: new BooleanAttribute({ mutable: true }),
+          },
+          passwordPolicy: {
+            minLength: 6,
+            requireLowercase: true,
+            requireUppercase: true,
+            requireDigits: false,
+            requireSymbols: false,
+          },
         },
       },
     });

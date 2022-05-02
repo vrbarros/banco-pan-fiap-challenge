@@ -23,3 +23,7 @@ export const amplifyConfig = {
   aws_user_pools_web_client_id:
     process.env.NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID
 };
+
+export const recaptcha = {
+  sitekey: process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
+};

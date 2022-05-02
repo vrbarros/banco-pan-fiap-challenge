@@ -39,7 +39,7 @@ export const LoginJWT = (props) => {
       password: Yup.string().max(255).required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
-        t('Você precisa estar de acordo com termos e condições de uso.')
+        t('Você precisa estar de acordo com termos e condições de uso')
       )
     }),
     onSubmit: async (values, helpers) => {

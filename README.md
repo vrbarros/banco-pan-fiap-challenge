@@ -22,9 +22,23 @@ Starts the development environment in AWS.
 
 Build your app and deploy the Next.js application.
 
+## Scope
+
+- Code-managed project infrastructure
+- Using AWS Cognito and AWS Amplify for Authentication
+- Password security with requirements:
+  - `minLength: 6`
+  - `requireLowercase: true`
+  - `requireUppercase: true`
+  - `requireDigits: false`
+  - `requireSymbols: false`
+  - Encrypted password
+- Form validation by reCAPTCHA
+
 ## Documentation
 
 Learn more about the Serverless Stack.
+
 - [Docs](https://docs.serverless-stack.com)
 - [@serverless-stack/cli](https://docs.serverless-stack.com/packages/cli)
 - [@serverless-stack/resources](https://docs.serverless-stack.com/packages/resources)

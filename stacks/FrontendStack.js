@@ -17,6 +17,8 @@ export default class FrontendStack extends sst.Stack {
         NEXT_PUBLIC_AWS_USER_POOLS_ID: auth.cognitoUserPool.userPoolId,
         NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID:
           auth.cognitoUserPoolClient.userPoolClientId,
+        NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY:
+          '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
       },
     });
 

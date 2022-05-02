@@ -16,9 +16,9 @@ export default class ApiStack extends sst.Stack {
         },
       },
       routes: {
-        'POST   /logs': 'src/create.main',
-        'GET    /logs': 'src/list.main',
-        'GET    /logs/{id}': 'src/get.main',
+        'POST   /logs': 'src/logs/create.main',
+        'GET    /logs': 'src/logs/list.main',
+        'GET    /logs/{id}': 'src/logs/get.main',
       },
     });
 

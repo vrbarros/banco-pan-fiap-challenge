@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -18,6 +19,8 @@ import { useAuth } from 'src/hooks/useAuth';
 import { useRefMounted } from 'src/hooks/useRefMounted';
 import { useTranslation } from 'react-i18next';
 
+import { recaptcha } from 'config';
+
 export const LoginAmplify = (props) => {
   const { t } = useTranslation();
   const { login } = useAuth();
@@ -29,6 +32,7 @@ export const LoginAmplify = (props) => {
       email: 'fiap@bancopan.com.br',
       password: 'Fiap2022*@',
       terms: true,
+      recaptcha: null,
       submit: null
     },
     validationSchema: Yup.object({
@@ -39,8 +43,11 @@ export const LoginAmplify = (props) => {
       password: Yup.string().max(255).required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
-        t('Você precisa estar de acordo com termos e condições de uso.')
-      )
+        t('Você precisa estar de acordo com termos e condições de uso')
+      ),
+      recaptcha: Yup.string()
+        .nullable()
+        .required(t('Você precisa fazer a verificação de que não é um robô'))
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -114,14 +121,18 @@ export const LoginAmplify = (props) => {
           <b>{t('Esqueceu sua senha?')}</b>
         </Link>
       </Box>
-
       {Boolean(formik.touched.terms && formik.errors.terms) && (
         <FormHelperText error>{formik.errors.terms}</FormHelperText>
       )}
-
+      <Box sx={{ mt: 1 }}>
+        <ReCAPTCHA
+          sitekey={recaptcha.sitekey}
+          onChange={(value) => console.log(value)}
+        />
+      </Box>
       <Button
         sx={{
-          mt: 3
+          mt: 2
         }}
         color="primary"
         startIcon={
@@ -135,6 +146,9 @@ export const LoginAmplify = (props) => {
       >
         {t('Entrar')}
       </Button>
+      {Boolean(formik.errors.recaptcha) && (
+        <FormHelperText error>{formik.errors.recaptcha}</FormHelperText>
+      )}
     </form>
   );
 };
