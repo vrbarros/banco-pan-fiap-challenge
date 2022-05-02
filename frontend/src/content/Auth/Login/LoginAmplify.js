@@ -26,22 +26,20 @@ export const LoginAmplify = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'demo@example.com',
-      password: 'TokyoPass1@',
+      email: 'fiap@bancopan.com.br',
+      password: 'Fiap2022*@',
       terms: true,
       submit: null
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email(t('The email provided should be a valid email address'))
+        .email(t('O e-mail informado precisa ser em um formato válido'))
         .max(255)
-        .required(t('The email field is required')),
-      password: Yup.string()
-        .max(255)
-        .required(t('The password field is required')),
+        .required(t('O campo e-mail é necessário')),
+      password: Yup.string().max(255).required(t('O campo senha é necessário')),
       terms: Yup.boolean().oneOf(
         [true],
-        t('You must agree to our terms and conditions')
+        t('Você precisa estar de acordo com termos e condições de uso.')
       )
     }),
     onSubmit: async (values, helpers) => {
@@ -49,7 +47,7 @@ export const LoginAmplify = (props) => {
         await login(values.email, values.password);
 
         if (isMountedRef()) {
-          const backTo = router.query.backTo || '/dashboards/reports';
+          const backTo = router.query.backTo || '/auth/profile';
           router.push(backTo);
         }
       } catch (err) {
@@ -72,7 +70,7 @@ export const LoginAmplify = (props) => {
         margin="normal"
         autoFocus
         helperText={formik.touched.email && formik.errors.email}
-        label={t('Email address')}
+        label={t('E-mail')}
         name="email"
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
@@ -85,7 +83,7 @@ export const LoginAmplify = (props) => {
         fullWidth
         margin="normal"
         helperText={formik.touched.password && formik.errors.password}
-        label={t('Password')}
+        label={t('Senha')}
         name="password"
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
@@ -106,14 +104,14 @@ export const LoginAmplify = (props) => {
           label={
             <>
               <Typography variant="body2">
-                {t('I accept the')}{' '}
-                <Link href="#">{t('terms and conditions')}</Link>.
+                {t('Estou de acordo com')}{' '}
+                <Link href="#">{t('termos e condições')}</Link>.
               </Typography>
             </>
           }
         />
         <Link href="/auth/recover-password">
-          <b>{t('Lost password?')}</b>
+          <b>{t('Esqueceu sua senha?')}</b>
         </Link>
       </Box>
 
@@ -135,7 +133,7 @@ export const LoginAmplify = (props) => {
         size="large"
         variant="contained"
       >
-        {t('Sign in')}
+        {t('Entrar')}
       </Button>
     </form>
   );

@@ -16,7 +16,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import useScrollTop from 'src/hooks/useScrollTop';
 import { SnackbarProvider } from 'notistack';
-import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
+import { AuthConsumer, AuthProvider } from 'src/contexts/AmplifyContext';
 
 const clientSideEmotionCache = createEmotionCache();
 

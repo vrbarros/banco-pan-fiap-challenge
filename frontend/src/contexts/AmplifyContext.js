@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import Amplify, { Auth } from 'aws-amplify';
+import { Amplify, Auth } from 'aws-amplify';
 import { amplifyConfig } from 'config';
 
 Amplify.configure(amplifyConfig);
@@ -46,20 +46,17 @@ const handlers = {
 const reducer = (state, action) =>
   handlers[action.type] ? handlers[action.type](state, action) : state;
 
-export const AuthContext =
-  createContext <
-  AuthContextValue >
-  {
-    ...initialAuthState,
-    method: 'Amplify',
-    login: () => Promise.resolve(),
-    logout: () => Promise.resolve(),
-    register: () => Promise.resolve(),
-    verifyCode: () => Promise.resolve(),
-    resendCode: () => Promise.resolve(),
-    passwordRecovery: () => Promise.resolve(),
-    passwordReset: () => Promise.resolve()
-  };
+export const AuthContext = createContext({
+  ...initialAuthState,
+  method: 'Amplify',
+  login: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+  register: () => Promise.resolve(),
+  verifyCode: () => Promise.resolve(),
+  resendCode: () => Promise.resolve(),
+  passwordRecovery: () => Promise.resolve(),
+  passwordReset: () => Promise.resolve()
+});
 
 export const AuthProvider = (props) => {
   const { children } = props;
