@@ -36,13 +36,11 @@ const MainContent = styled(Box)(
 `
 );
 
-function MultiFactorBasic() {
+function VerifyingBasic() {
   const { t } = useTranslation();
   const isMountedRef = useRefMounted();
   const router = useRouter();
   const { user } = useAuth();
-
-  console.log(user);
 
   const { backTo } = router.query;
 
@@ -50,6 +48,12 @@ function MultiFactorBasic() {
     if (isMountedRef()) {
       if (!user) {
         router.push('/auth/login');
+      } else {
+        const { preferredMFA } = user;
+
+        if (preferredMFA === 'NOMFA') {
+          router.push('/auth/profile');
+        }
       }
     }
   }, []);
@@ -211,10 +215,10 @@ function MultiFactorBasic() {
   );
 }
 
-MultiFactorBasic.getLayout = (page) => (
+VerifyingBasic.getLayout = (page) => (
   <Guest>
     <BaseLayout>{page}</BaseLayout>
   </Guest>
 );
 
-export default MultiFactorBasic;
+export default VerifyingBasic;

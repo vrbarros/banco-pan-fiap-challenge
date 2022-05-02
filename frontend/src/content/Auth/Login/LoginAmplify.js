@@ -56,7 +56,7 @@ export const LoginAmplify = (props) => {
 
         if (isMountedRef()) {
           router.push({
-            pathname: '/auth/multi-factor',
+            pathname: '/auth/verifying',
             query: router.query
           });
         }

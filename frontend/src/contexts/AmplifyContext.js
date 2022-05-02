@@ -65,6 +65,7 @@ export const AuthProvider = (props) => {
   useEffect(() => {
     const initialize = async () => {
       try {
+        // Documentation: https://github.com/aws-amplify/amplify-js/blob/4644b4322ee260165dd756ca9faeb235445000e3/packages/amazon-cognito-identity-js/index.d.ts#L48
         const user = await Auth.currentAuthenticatedUser();
 
         dispatch({

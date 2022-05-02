@@ -35,6 +35,7 @@ Build your app and deploy the Next.js application.
   - Encrypted password
 - Form validation by reCAPTCHA
 - Password recovery and reset (with code verification)
+- Multi-Factor Authentication using SMS
 
 ## Documentation
 
