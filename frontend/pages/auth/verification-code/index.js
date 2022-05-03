@@ -11,7 +11,8 @@ import {
   Dialog,
   Button,
   Avatar,
-  styled
+  styled,
+  Alert
 } from '@mui/material';
 import Head from 'next/head';
 import { useAuth } from 'src/hooks/useAuth';
@@ -208,6 +209,11 @@ function VerificationCodeBasic() {
                   >
                     {t('Confirmar')}
                   </Button>
+                  {Boolean(errors.submit) && (
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                      {errors.submit}
+                    </Alert>
+                  )}
                 </form>
               )}
             </Formik>

@@ -20,6 +20,7 @@ export default class WebStack extends sst.Stack {
         NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY:
           '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
       },
+      waitForInvalidation: false,
     });
 
     site.attachPermissions([]);

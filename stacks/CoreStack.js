@@ -18,7 +18,7 @@ export default class CoreStack extends sst.Stack {
           customAttributes: {
             isBlocked: new BooleanAttribute({ mutable: true }),
           },
-          mfa: Mfa.OPTIONAL,
+          mfa: Mfa.REQUIRED,
           mfaSecondFactor: { sms: true, otp: false },
           passwordPolicy: {
             minLength: 6,
