@@ -1,6 +1,10 @@
 import * as sst from '@serverless-stack/resources';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { BooleanAttribute, Mfa } from 'aws-cdk-lib/aws-cognito';
+import {
+  BooleanAttribute,
+  Mfa,
+  AccountRecovery,
+} from 'aws-cdk-lib/aws-cognito';
 
 export default class CoreStack extends sst.Stack {
   auth;
@@ -27,6 +31,7 @@ export default class CoreStack extends sst.Stack {
             requireDigits: false,
             requireSymbols: false,
           },
+          accountRecovery: AccountRecovery.EMAIL_ONLY,
         },
       },
     });
