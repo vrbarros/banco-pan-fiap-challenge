@@ -23,8 +23,6 @@ export default class WebStack extends sst.Stack {
       waitForInvalidation: false,
     });
 
-    site.attachPermissions([]);
-
     this.addOutputs({
       URL: site.url,
     });
