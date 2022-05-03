@@ -1,14 +1,15 @@
-import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sst from '@serverless-stack/resources';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { BooleanAttribute, Mfa } from 'aws-cdk-lib/aws-cognito';
 
-export default class AuthStack extends sst.Stack {
+export default class CoreStack extends sst.Stack {
   auth;
+  api;
 
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const { api, bucket } = props;
+    const { table, bucket } = props;
 
     this.auth = new sst.Auth(this, 'Auth', {
       cognito: {
@@ -30,8 +31,35 @@ export default class AuthStack extends sst.Stack {
       },
     });
 
+    this.addOutputs({
+      Region: scope.region,
+      UserPoolId: this.auth.cognitoUserPool.userPoolId,
+      IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
+      UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId,
+    });
+
+    this.api = new sst.Api(this, 'Api', {
+      defaultAuthorizationType: 'AWS_IAM',
+      defaultFunctionProps: {
+        environment: {
+          TABLE_NAME: table.tableName,
+        },
+      },
+      routes: {
+        'POST   /logs': 'src/logs/create.main',
+        'GET    /logs': 'src/logs/list.main',
+        'GET    /logs/{id}': 'src/logs/get.main',
+      },
+    });
+
+    this.api.attachPermissions([table]);
+
+    this.addOutputs({
+      ApiEndpoint: this.api.url,
+    });
+
     this.auth.attachPermissionsForAuthUsers([
-      api,
+      this.api,
       new iam.PolicyStatement({
         actions: ['s3:*'],
         effect: iam.Effect.ALLOW,
@@ -40,12 +68,5 @@ export default class AuthStack extends sst.Stack {
         ],
       }),
     ]);
-
-    this.addOutputs({
-      Region: scope.region,
-      UserPoolId: this.auth.cognitoUserPool.userPoolId,
-      IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
-      UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId,
-    });
   }
 }

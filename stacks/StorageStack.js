@@ -16,5 +16,10 @@ export default class StorageStack extends sst.Stack {
       },
       primaryIndex: { partitionKey: 'userId', sortKey: 'logId' },
     });
+
+    this.addOutputs({
+      TableName: this.table.tableName,
+      BucketArn: this.bucket.bucketArn,
+    });
   }
 }
