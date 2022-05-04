@@ -7,7 +7,7 @@ export default class WebStack extends sst.Stack {
     const { auth } = props;
 
     const site = new sst.NextjsSite(this, 'NextjsSite', {
-      path: 'frontend',
+      path: 'service-oauth',
       environment: {
         REGION: scope.region,
         NEXT_PUBLIC_AWS_PROJECT_REGION: scope.region,
