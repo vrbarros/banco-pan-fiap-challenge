@@ -1,22 +1,23 @@
 import * as sst from '@serverless-stack/resources';
 
-export default class WebStack extends sst.Stack {
+export default class OAuthStack extends sst.Stack {
+  oauth;
+
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const { auth } = props;
+    const { cognito } = props;
 
-    const site = new sst.NextjsSite(this, 'NextjsSite', {
+    this.oauth = new sst.NextjsSite(this, 'service-oauth', {
       path: 'service-oauth',
       environment: {
-        REGION: scope.region,
         NEXT_PUBLIC_AWS_PROJECT_REGION: scope.region,
         NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID:
-          auth.cognitoCfnIdentityPool.ref,
+          cognito.cognitoCfnIdentityPool.ref,
         NEXT_PUBLIC_AWS_COGNITO_REGION: scope.region,
-        NEXT_PUBLIC_AWS_USER_POOLS_ID: auth.cognitoUserPool.userPoolId,
+        NEXT_PUBLIC_AWS_USER_POOLS_ID: cognito.cognitoUserPool.userPoolId,
         NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID:
-          auth.cognitoUserPoolClient.userPoolClientId,
+          cognito.cognitoUserPoolClient.userPoolClientId,
         NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY:
           '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
       },
@@ -24,7 +25,8 @@ export default class WebStack extends sst.Stack {
     });
 
     this.addOutputs({
-      URL: site.url,
+      Service: 'service-oauth',
+      URL: this.oauth.url,
     });
   }
 }

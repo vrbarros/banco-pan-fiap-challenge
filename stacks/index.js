@@ -1,4 +1,5 @@
-import WebStack from './WebStack';
+import OAuthStack from './OAuthStack';
+import BankingStack from './BankingStack';
 import StorageStack from './StorageStack';
 import CoreStack from './CoreStack';
 
@@ -14,7 +15,11 @@ export default function main(app) {
     bucket: storageStack.bucket,
   });
 
-  new WebStack(app, 'web', {
-    auth: coreStack.auth,
+  const oauthStack = new OAuthStack(app, 'service-oauth', {
+    cognito: coreStack.cognito,
+  });
+
+  new BankingStack(app, 'service-banking', {
+    oauth: oauthStack.oauth,
   });
 }

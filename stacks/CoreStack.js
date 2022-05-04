@@ -7,7 +7,7 @@ import {
 } from 'aws-cdk-lib/aws-cognito';
 
 export default class CoreStack extends sst.Stack {
-  auth;
+  cognito;
   api;
 
   constructor(scope, id, props) {
@@ -15,7 +15,7 @@ export default class CoreStack extends sst.Stack {
 
     const { table, bucket } = props;
 
-    this.auth = new sst.Auth(this, 'Auth', {
+    this.cognito = new sst.Auth(this, 'Auth', {
       cognito: {
         userPool: {
           signInAliases: { email: true },
@@ -38,9 +38,9 @@ export default class CoreStack extends sst.Stack {
 
     this.addOutputs({
       Region: scope.region,
-      UserPoolId: this.auth.cognitoUserPool.userPoolId,
-      IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
-      UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId,
+      UserPoolId: this.cognito.cognitoUserPool.userPoolId,
+      IdentityPoolId: this.cognito.cognitoCfnIdentityPool.ref,
+      UserPoolClientId: this.cognito.cognitoUserPoolClient.userPoolClientId,
     });
 
     this.api = new sst.Api(this, 'Api', {
@@ -63,7 +63,7 @@ export default class CoreStack extends sst.Stack {
       ApiEndpoint: this.api.url,
     });
 
-    this.auth.attachPermissionsForAuthUsers([
+    this.cognito.attachPermissionsForAuthUsers([
       this.api,
       new iam.PolicyStatement({
         actions: ['s3:*'],
