@@ -1,6 +1,10 @@
-# Getting Started with Serverless Stack (SST)
+# Banco PAN FIAP Challenge
 
 This project was bootstrapped with [Create Serverless Stack](https://docs.serverless-stack.com/packages/create-serverless-stack).
+
+This application was developed thinking about offering a centralized authentication service that serves multiple applications in the cloud, be they legacy or not.
+
+## Getting Started
 
 Start by installing the dependencies.
 
