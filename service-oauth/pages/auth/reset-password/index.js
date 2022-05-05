@@ -260,7 +260,7 @@ function ResetPasswordBasic() {
             >
               {t('Gostaria de tentar acessar novamente?')}
             </Typography>{' '}
-            <Link href="/auth/login">
+            <Link href={{ pathname: '/auth/login', query: router.query }}>
               <b>Clique aqui</b>
             </Link>
           </Box>
@@ -296,7 +296,7 @@ function ResetPasswordBasic() {
             component={Link}
             size="large"
             variant="contained"
-            href="/auth/login"
+            href={{ pathname: '/auth/login', query: router.query }}
           >
             {t('Continuar')}
           </Button>

@@ -42,18 +42,15 @@ function VerifyingBasic() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const { backTo } = router.query;
-
   useEffect(() => {
     if (isMountedRef()) {
       if (!user) {
-        router.push('/auth/login');
+        router.push({ pathname: '/auth/login', query: router.query });
       } else {
         const { preferredMFA } = user;
 
-        if (preferredMFA === 'NOMFA') {
-          router.push('/auth/profile');
-        }
+        if (preferredMFA === 'NOMFA')
+          router.push({ pathname: '/auth/login', query: router.query });
       }
     }
   }, []);
@@ -117,7 +114,6 @@ function VerifyingBasic() {
                       if (isMountedRef()) {
                         setStatus({ success: true });
                         setSubmitting(false);
-                        router.push(backTo || '/auth/profile');
                       }
                     },
                     onFailure: (err) => {
@@ -205,7 +201,7 @@ function VerifyingBasic() {
             >
               {t('Gostaria de tentar acessar novamente?')}
             </Typography>{' '}
-            <Link href="/auth/login">
+            <Link href={{ pathname: '/auth/login', query: router.query }}>
               <b>Clique aqui</b>
             </Link>
           </Box>

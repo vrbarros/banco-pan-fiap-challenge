@@ -30,7 +30,7 @@ export const LoginAmplify = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: router?.query?.email || '',
       password: '',
       terms: true,
       recaptcha: null,
@@ -120,7 +120,9 @@ export const LoginAmplify = (props) => {
             </>
           }
         />
-        <Link href="/auth/recover-password">
+        <Link
+          href={{ pathname: '/auth/recover-password', query: router.query }}
+        >
           <b>{t('Esqueceu sua senha?')}</b>
         </Link>
       </Box>

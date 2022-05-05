@@ -28,7 +28,7 @@ export const RegisterAmplify = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: router?.query?.email || '',
       phoneNumber: '+55',
       password: '',
       terms: false,
@@ -63,7 +63,7 @@ export const RegisterAmplify = (props) => {
         if (isMountedRef()) {
           router.push({
             pathname: '/auth/verification-code',
-            query: { redirect: router.query.redirect, email: values.email }
+            query: { ...router.query, email: values.email }
           });
         }
       } catch (err) {

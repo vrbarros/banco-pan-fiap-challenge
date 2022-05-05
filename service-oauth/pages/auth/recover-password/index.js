@@ -246,6 +246,7 @@ function RecoverPasswordBasic() {
                         href={{
                           pathname: '/auth/reset-password',
                           query: {
+                            ...router.query,
                             email: values.email
                           }
                         }}
@@ -267,7 +268,7 @@ function RecoverPasswordBasic() {
             >
               {t('Gostaria de tentar acessar novamente?')}
             </Typography>{' '}
-            <Link href="/auth/login">
+            <Link href={{ pathname: '/auth/login', query: router.query }}>
               <b>Clique aqui</b>
             </Link>
           </Box>

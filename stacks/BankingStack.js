@@ -13,6 +13,7 @@ export default class BankingStack extends sst.Stack {
         NEXT_PUBLIC_OAUTH_APP_URL: oauth.url,
       },
       waitForInvalidation: false,
+      disablePlaceholder: true,
     });
 
     this.addOutputs({

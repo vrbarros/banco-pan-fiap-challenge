@@ -89,7 +89,7 @@ function RegisterBasic() {
                 >
                   {t('Já possui uma conta?')}
                 </Typography>{' '}
-                <Link href="/auth/login">
+                <Link href={{ pathname: '/auth/login', query: router.query }}>
                   <b>Entre aqui</b>
                 </Link>
               </Box>

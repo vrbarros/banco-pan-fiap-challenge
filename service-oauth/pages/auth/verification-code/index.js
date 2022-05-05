@@ -227,7 +227,7 @@ function VerificationCodeBasic() {
             >
               {t('Gostaria de tentar acessar novamente?')}
             </Typography>{' '}
-            <Link href="/auth/login">
+            <Link href={{ pathname: '/auth/login', query: router.query }}>
               <b>Clique aqui</b>
             </Link>
           </Box>
@@ -258,12 +258,13 @@ function VerificationCodeBasic() {
               'Tudo certo com a verificação da sua conta no Banco PAN. Você agora tem acesso ao maior portfólio de produtos financeiros feitos exclusivamente para você!'
             )}
           </Typography>
+
           <Button
             fullWidth
             component={Link}
             size="large"
             variant="contained"
-            href="/auth/profile"
+            href={{ pathname: '/auth/login', query: router.query }}
           >
             {t('Continuar')}
           </Button>

@@ -22,6 +22,7 @@ export default class OAuthStack extends sst.Stack {
           '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
       },
       waitForInvalidation: false,
+      disablePlaceholder: true,
     });
 
     this.addOutputs({

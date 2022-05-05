@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { ListSubheader, alpha, Box, List, styled } from '@mui/material';
 import SidebarMenuItem from './item';
-import menuItems, { MenuItem } from './items';
+import menuItems from './items';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 

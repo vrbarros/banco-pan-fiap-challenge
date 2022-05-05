@@ -40,7 +40,15 @@ const handlers = {
   VERIFY_CODE: (state) => ({ ...state }),
   RESEND_CODE: (state) => ({ ...state }),
   PASSWORD_RECOVERY: (state) => ({ ...state }),
-  PASSWORD_RESET: (state) => ({ ...state })
+  PASSWORD_RESET: (state) => ({ ...state }),
+  CURRENT_SESSION: (state, action) => {
+    const { currentSession } = action.payload;
+
+    return {
+      ...state,
+      currentSession
+    };
+  }
 };
 
 const reducer = (state, action) =>
@@ -55,7 +63,8 @@ export const AuthContext = createContext({
   verifyCode: () => Promise.resolve(),
   resendCode: () => Promise.resolve(),
   passwordRecovery: () => Promise.resolve(),
-  passwordReset: () => Promise.resolve()
+  passwordReset: () => Promise.resolve(),
+  currentSession: () => Promise.resolve()
 });
 
 export const AuthProvider = (props) => {
@@ -85,7 +94,8 @@ export const AuthProvider = (props) => {
               coverImg: user.coverImg,
               followers: user.followers,
               description: user.description
-            }
+            },
+            currentSession: null
           }
         });
       } catch (error) {
@@ -93,7 +103,8 @@ export const AuthProvider = (props) => {
           type: 'INITIALIZE',
           payload: {
             isAuthenticated: false,
-            user: null
+            user: null,
+            currentSession: null
           }
         });
       }
@@ -159,6 +170,14 @@ export const AuthProvider = (props) => {
     });
   };
 
+  const currentSession = async () => {
+    const currentSession = await Auth.currentSession();
+    dispatch({
+      type: 'CURRENT_SESSION',
+      payload: { currentSession }
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -170,7 +189,8 @@ export const AuthProvider = (props) => {
         verifyCode,
         resendCode,
         passwordRecovery,
-        passwordReset
+        passwordReset,
+        currentSession
       }}
     >
       {children}

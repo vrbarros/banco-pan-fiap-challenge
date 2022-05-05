@@ -4,7 +4,8 @@ import {
   Typography,
   Container,
   styled,
-  Button
+  Button,
+  TextField
 } from '@mui/material';
 import Head from 'next/head';
 import { useAuth } from 'src/hooks/useAuth';
@@ -68,7 +69,7 @@ function LoginCover() {
   const { t } = useTranslation();
 
   const router = useRouter();
-  const { redirect } = router.query;
+  const { service } = router.query;
 
   return (
     <>
@@ -117,7 +118,7 @@ function LoginCover() {
               </Box>
               <Button
                 component={Link}
-                href="/auth/register"
+                href={{ pathname: '/auth/register', query: router.query }}
                 color="primary"
                 type="submit"
                 fullWidth
@@ -179,10 +180,41 @@ function LoginCover() {
                 >
                   {t('Ainda não é cliente?')}
                 </Typography>{' '}
-                <Link href="/auth/register">
+                <Link
+                  href={{ pathname: '/auth/register', query: router.query }}
+                >
                   <b>Abra sua conta!</b>
                 </Link>
               </Box>
+            </Card>
+
+            <Card
+              sx={{
+                width: '100%',
+                p: 4
+              }}
+            >
+              <Typography
+                variant="h4"
+                sx={{
+                  mb: 1
+                }}
+              >
+                {t('Contexto de utilização do serviço')}
+              </Typography>
+              <TextField
+                error={!service}
+                fullWidth
+                margin="normal"
+                autoFocus
+                helperText={t('Serviço solicitante da autenticação')}
+                label={t('Serviço')}
+                name="service"
+                type="text"
+                value={service}
+                variant="outlined"
+                disabled
+              />
             </Card>
           </Container>
         </MainContent>
