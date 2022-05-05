@@ -12,6 +12,7 @@ import {
   Button,
   Avatar,
   styled,
+  CircularProgress,
   Alert
 } from '@mui/material';
 import Head from 'next/head';
@@ -77,6 +78,7 @@ function VerificationCodeBasic() {
   const { email } = router.query;
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
 
   return (
     <>
@@ -132,10 +134,9 @@ function VerificationCodeBasic() {
                   .max(6)
                   .required(t('Você precisa informar um código de verificação'))
               })}
-              onSubmit={async (
-                _values,
-                { setErrors, setStatus, setSubmitting }
-              ) => {
+              onSubmit={async (_values, { setErrors, setStatus }) => {
+                setSubmitting(true);
+
                 try {
                   await verifyCode(_values.email, _values.verificationCode);
 
@@ -199,9 +200,15 @@ function VerificationCodeBasic() {
                       mt: 3
                     }}
                     color="primary"
-                    disabled={Boolean(
-                      touched.verificationCode && errors.verificationCode
-                    )}
+                    startIcon={
+                      isSubmitting ? <CircularProgress size="1rem" /> : null
+                    }
+                    disabled={
+                      isSubmitting ||
+                      Boolean(
+                        touched.verificationCode && errors.verificationCode
+                      )
+                    }
                     type="submit"
                     fullWidth
                     size="large"

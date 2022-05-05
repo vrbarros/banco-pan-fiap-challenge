@@ -23,7 +23,7 @@ import { useRouter } from 'next/router';
 
 import { useTranslation } from 'react-i18next';
 import Logo from 'src/components/Logo';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const MainContent = styled(Box)(
   () => `
@@ -41,6 +41,7 @@ function VerifyingBasic() {
   const isMountedRef = useRefMounted();
   const router = useRouter();
   const { user } = useAuth();
+  const [isSubmitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (isMountedRef()) {
@@ -104,10 +105,8 @@ function VerifyingBasic() {
                   .max(6)
                   .required(t('Você precisa informar um código de verificação'))
               })}
-              onSubmit={async (
-                _values,
-                { setErrors, setStatus, setSubmitting }
-              ) => {
+              onSubmit={async (_values, { setErrors, setStatus }) => {
+                setSubmitting(true);
                 try {
                   user.sendMFACode(_values.verificationCode, {
                     onSuccess: () => {
@@ -138,7 +137,6 @@ function VerifyingBasic() {
               }}
             >
               {({
-                isSubmitting,
                 errors,
                 handleBlur,
                 handleChange,
