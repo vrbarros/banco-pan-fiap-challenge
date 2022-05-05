@@ -73,21 +73,23 @@ function IndexPage() {
               </Typography>
             </Box>
             <Container maxWidth="sm">
-              <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
-                <List>
-                  <ListItemButton
-                    component="a"
-                    href={`${process.env.NEXT_PUBLIC_OAUTH_APP_URL}/auth/login?service=${window?.location?.href}`}
-                  >
-                    <ListItemIcon>
-                      <SecurityOutlined />
-                    </ListItemIcon>
-                    <ListItemText>
-                      {t('Solicitar credenciais para o serviço de Banking')}
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Card>
+              {!refreshToken && (
+                <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
+                  <List>
+                    <ListItemButton
+                      component="a"
+                      href={`${process.env.NEXT_PUBLIC_OAUTH_APP_URL}/auth/login?service=${window?.location?.origin}`}
+                    >
+                      <ListItemIcon>
+                        <SecurityOutlined />
+                      </ListItemIcon>
+                      <ListItemText>
+                        {t('Solicitar credenciais para o serviço de Banking')}
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                </Card>
+              )}
               <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
                 <Typography
                   variant="h4"
@@ -128,7 +130,7 @@ function IndexPage() {
                   component="a"
                   fullWidth
                   variant="contained"
-                  href={`${process.env.NEXT_PUBLIC_OAUTH_APP_URL}/auth/logout?service=${window?.location?.href}`}
+                  href={`${process.env.NEXT_PUBLIC_OAUTH_APP_URL}/auth/logout?service=${window?.location?.origin}`}
                 >
                   {t('Encerrar sessão')}
                 </Button>
