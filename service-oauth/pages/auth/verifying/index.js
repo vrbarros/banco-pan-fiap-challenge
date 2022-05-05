@@ -114,6 +114,8 @@ function VerifyingBasic() {
                       if (isMountedRef()) {
                         setStatus({ success: true });
                         setSubmitting(false);
+
+                        window.location.reload();
                       }
                     },
                     onFailure: (err) => {

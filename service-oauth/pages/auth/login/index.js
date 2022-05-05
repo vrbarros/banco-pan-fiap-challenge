@@ -190,8 +190,10 @@ function LoginCover() {
 
             <Card
               sx={{
+                textAlign: 'center',
                 width: '100%',
-                p: 4
+                p: 4,
+                mb: 2
               }}
             >
               <Typography
@@ -203,12 +205,13 @@ function LoginCover() {
                 {t('Contexto de utilização do serviço')}
               </Typography>
               <TextField
-                error={!service}
                 fullWidth
                 margin="normal"
                 autoFocus
-                helperText={t('Serviço solicitante da autenticação')}
-                label={t('Serviço')}
+                helperText={t(
+                  'Serviço solicitante da autenticação. Caso nenhum serviço seja solicitado, será direcionado para o perfil'
+                )}
+                label={t('Serviço solicitante')}
                 name="service"
                 type="text"
                 value={service}

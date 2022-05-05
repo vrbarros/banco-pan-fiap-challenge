@@ -8,7 +8,8 @@ import {
   ListItemText,
   ListItemIcon,
   TextField,
-  styled
+  styled,
+  Button
 } from '@mui/material';
 import Head from 'next/head';
 import SecurityOutlined from '@mui/icons-material/SecurityOutlined';
@@ -104,7 +105,7 @@ function IndexPage() {
                   label={t('Validade')}
                   name="isValid"
                   type="text"
-                  value={isValid}
+                  value={isValid || ''}
                   variant="outlined"
                   disabled
                 />
@@ -118,10 +119,19 @@ function IndexPage() {
                   label={t('Refresh Token')}
                   name="refreshToken"
                   type="text"
-                  value={refreshToken}
+                  value={refreshToken || ''}
                   variant="outlined"
                   disabled
                 />
+                <Button
+                  disabled={!refreshToken}
+                  component="a"
+                  fullWidth
+                  variant="contained"
+                  href={`${process.env.NEXT_PUBLIC_OAUTH_APP_URL}/auth/logout?service=${window?.location?.href}`}
+                >
+                  {t('Encerrar sessão')}
+                </Button>
               </Card>
             </Container>
           </Container>
